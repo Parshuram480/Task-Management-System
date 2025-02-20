@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Task</title>
+    <title>Edit Task</title>
 </head>
 <body>
-    <h2>Add Task</h2>
+    <h2>Edit Task</h2>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button type="submit">Update</button>
     </form>
     <a href="/task_list/">Back to Task List</a>
 </body>
