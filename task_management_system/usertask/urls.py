@@ -9,5 +9,6 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('login/', login_page, name="login"),
     path('register/', register_page, name="register"),
-    path('home/', logout_view, name="logout")
+    path('home/', logout_view, name="logout"),
+    path('add_task/', add_task, name="add_task")
 ]

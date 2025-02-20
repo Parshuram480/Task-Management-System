@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from .models import *
 # from django.http import HttpResponse
 # from django.template import loader
+from .forms import AddTaskForm
 
 
 # Define view function for the Home page
@@ -73,3 +74,14 @@ def register_page(request):
 
 def logout_view(request):
     logout(request)
+    
+    
+def add_task(request):
+    if request.method == 'POST':
+        form = AddTaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_task.html')
+    else:
+        form = AddTaskForm()
+    return render(request, 'add_task.html', {'form': form})

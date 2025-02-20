@@ -6,17 +6,12 @@
     <title>Add Task</title>
 </head>
 <body>
-    <h1>Task Management System</h1>
-    
-    <div>
-        <label>Title</label>
-        <input type="text" class="form-control" name="first_name" placeholder="Enter first_name" required>
-    </div>
-
-    <div>
-        <label>First Name</label>
-        <input type="text" class="form-control" name="first_name" placeholder="Enter first_name" required>
-    </div>
-
+    {% block content %}
+    <h2>Add Task</h2>
+    <form method="POST" action= "/add_task/">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Add</button>
+    </form>
+    {% endblock %}
 </body>
 </html>
