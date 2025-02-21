@@ -73,7 +73,7 @@ def register_page(request):
 # ask list page
 @login_required
 def task_list(request):
-    # giving the authorization to the valid user 
+    # giving the authorization to the valid user
     tasks = AddTask.objects.filter(user=request.user)
     return render(request, 'task_list.html', {'tasks': tasks})
 
