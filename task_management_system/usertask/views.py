@@ -21,7 +21,7 @@ def login_page(request):
 
         # check the user exists or not with provided username
         if not User.objects.filter(username=username).exists():
-            messages.error(request, "Invalid USer")
+            messages.error(request, "Invalid User")
             return redirect('/login/')
 
         # AUthenticate the USER
@@ -51,7 +51,7 @@ def register_page(request):
 
         if user.exists():
             messages.info(request, "Username already taken.")
-            return redirect('/register/')
+            return redirect('/login/')
 
         # creating the user
         user = User.objects.create_user(
