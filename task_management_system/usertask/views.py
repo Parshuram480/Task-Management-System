@@ -3,9 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import *
-# from django.http import HttpResponse
-# from django.template import loader
+from .models import AddTask
 from .forms import AddTaskForm
 
 
@@ -14,10 +12,11 @@ def home(request):
     return render(request, 'home.html')
 
 
+# login page function
 def login_page(request):
     # CHeck the method is POST
     if request.method == "POST":
-        username = request.POST.get('username')
+        username = request.POST.get("username")
         password = request.POST.get("password")
 
         # check the user exists or not with provided username
@@ -70,16 +69,21 @@ def register_page(request):
 
     return render(request, "register.html")
 
+
+# ask list page
 @login_required
 def task_list(request):
+    # giving the authorization to the valid user 
     tasks = AddTask.objects.filter(user=request.user)
     return render(request, 'task_list.html', {'tasks': tasks})
+
 
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('/login/')
-    
+
+
 @login_required
 def add_task(request):
     if request.method == 'POST':
@@ -88,11 +92,12 @@ def add_task(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
-            return redirect('add_task')
+            return redirect('/task_list/')
     else:
         form = AddTaskForm()
 
     return render(request, 'add_task.html', {'form': form})
+
 
 @login_required
 def update_task(request, task_id):
@@ -104,13 +109,17 @@ def update_task(request, task_id):
             return redirect('/task_list/')
     else:
         form = AddTaskForm(instance=task)
-    return render(request, 'add_task.html', {'form': form})
+    return render(request, 'edit_task.html', {'form': form})
+
 
 @login_required
 def delete_task(request, task_id):
-    task = get_object_or_404(AddTask, id=task_id, user=request.user)
-    task.delete()
-    return redirect('/task_list/')
+    task = get_object_or_404(AddTask, id=task_id)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('task_list')
+    return render(request, 'delete_task.html', {'task': task})
+
 
 @login_required
 def toggle_task_status(request, task_id):
