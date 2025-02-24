@@ -14,6 +14,11 @@ def home(request):
 
 # login page function
 def login_page(request):
+
+    # Redirect already logged-in users to task_list
+    if request.user.is_authenticated:
+        return redirect('/task_list/')
+
     # CHeck the method is POST
     if request.method == "POST":
         username = request.POST.get("username")
@@ -39,19 +44,29 @@ def login_page(request):
 
 
 def register_page(request):
+
+    # Redirect already logged-in users to task_list
+    if request.user.is_authenticated:
+        return redirect('/task_list/')
+
     # check the request method is post
     if request.method == "POST":
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+
+        # Check if any field is empty
+        if not first_name or not last_name or not username or not password:
+            messages.error(request, "All fields are required.")
+            return redirect('/register/')
 
         # check that the user exists with the same username
         user = User.objects.filter(username=username)
 
         if user.exists():
             messages.info(request, "Username already taken.")
-            return redirect('/login/')
+            return redirect('/register/')
 
         # creating the user
         user = User.objects.create_user(
@@ -74,7 +89,7 @@ def register_page(request):
 @login_required
 def task_list(request):
     # giving the authorization to the valid user
-    tasks = AddTask.objects.filter(user=request.user)
+    tasks = AddTask.objects.filter(user=request.user, deleted=False)
     return render(request, 'task_list.html', {'tasks': tasks})
 
 
@@ -114,7 +129,7 @@ def update_task(request, task_id):
 
 @login_required
 def delete_task(request, task_id):
-    task = get_object_or_404(AddTask, id=task_id)
+    task = get_object_or_404(AddTask, id=task_id, user=request.user)
     if request.method == 'POST':
         task.delete()
         return redirect('task_list')

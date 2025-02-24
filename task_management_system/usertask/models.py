@@ -3,7 +3,24 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-class AddTask(models.Model):
+
+class BaseModel(models.Model):
+    deleted = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+    def delete(self):
+        self.deleted = True
+        self.save()
+
+
+class BaseModelManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+
+
+class AddTask(BaseModel):
     status_types = (
         (1, "Pending"),
         (2, "Completed"),
