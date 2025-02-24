@@ -9,6 +9,11 @@ from .forms import AddTaskForm
 
 # Define view function for the Home page
 def home(request):
+
+    # Redirect already logged-in users to task_list
+    if request.user.is_authenticated:
+        return redirect('/task_list/')
+
     return render(request, 'home.html')
 
 
