@@ -21,13 +21,9 @@ class BaseModelManager(models.Manager):
 
 
 class AddTask(BaseModel):
-    status_types = (
-        (1, "Pending"),
-        (2, "Completed"),
-    )
     title = models.CharField(max_length=200)
     description = models.TextField()
-    status = models.IntegerField(choices=status_types, default=1)
+    status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

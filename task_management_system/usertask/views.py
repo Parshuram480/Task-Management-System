@@ -144,6 +144,6 @@ def delete_task(request, task_id):
 @login_required
 def toggle_task_status(request, task_id):
     task = get_object_or_404(AddTask, id=task_id, user=request.user)
-    task.status = 1 if task.status == 2 else 2
+    task.status = not task.status
     task.save()
     return redirect('/task_list/')

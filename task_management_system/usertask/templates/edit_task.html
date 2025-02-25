@@ -23,8 +23,8 @@
                 <div class="mb-3">
                     <label class="form-label">Status</label>
                     <select class="form-select" name="status">
-                        <option value="1" {% if form.status.value == 1 %}selected{% endif %}>Pending</option>
-                        <option value="2" {% if form.status.value == 2 %}selected{% endif %}>Completed</option>
+                        <option value="False" {% if form.status.value == False %}selected{% endif %}>Pending</option>
+                        <option value="True" {% if form.status.value == True %}selected{% endif %}>Completed</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Update</button>
