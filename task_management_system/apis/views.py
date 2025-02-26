@@ -24,7 +24,7 @@ def login_api(request):
 
     user = authenticate(username=username, password=password)
     if user is not None:
-        token, created = Token.objects.get_or_create(user=user)
+        token, _ = Token.objects.get_or_create(user=user)
         return Response({'message': 'user created successfully', 'token': token.key}, status=200)
     return Response({'error': 'invalid credentialS'}, status=401)
 
