@@ -23,7 +23,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddTask
-        fields = "__all__"
+        exclude = ['deleted']
 
 
 class AddTaskSerializer(serializers.ModelSerializer):

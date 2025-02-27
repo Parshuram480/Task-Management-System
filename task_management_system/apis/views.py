@@ -39,7 +39,7 @@ def logout_api(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def task_list_api(request):
-    tasks = AddTask.objects.filter(user=request.user)
+    tasks = AddTask.objects.filter(user=request.user, deleted=False)
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
@@ -57,7 +57,7 @@ def add_task_api(request):
 @api_view(['PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def update_task_api(request, task_id):
-    task = AddTask.objects.filter(id=task_id, user=request.user).first()
+    task = AddTask.objects.filter(id=task_id, user=request.user, deleted=False).first()
     if not task:
         return Response({'error': 'Task Not Found'}, status=404)
 
@@ -71,7 +71,7 @@ def update_task_api(request, task_id):
 @api_view(['DELETE'])
 @permission_classes([permissions.IsAuthenticated])
 def delete_task_api(request, task_id):
-    task = AddTask.objects.filter(id=task_id, user=request.user).first()
+    task = AddTask.objects.filter(id=task_id, user=request.user, deleted=False).first()
     if not task:
         return Response({'error': 'Task Not Found'}, status=404)
     task.delete()
@@ -81,7 +81,7 @@ def delete_task_api(request, task_id):
 @api_view(['PATCH'])
 @permission_classes([permissions.IsAuthenticated])
 def toggle_task_api(request, task_id):
-    task = AddTask.objects.filter(id=task_id, user=request.user).first()
+    task = AddTask.objects.filter(id=task_id, user=request.user, deleted=False).first()
     if not task:
         return Response({'error': 'Task Not Found'}, status=404)
     task.status = not task.status
